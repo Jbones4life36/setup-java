@@ -73,4 +73,36 @@ available at https://www.contributor-covenant.org/version/1/4/code-of-conduct.ht
 [homepage]: https://www.contributor-covenant.org
 
 For answers to common questions about this code of conduct, see
-https://www.contributor-covenant.org/faq
+https://www.contributor-covenant.org/faqfeatures/matcher{
+  "name": "foo",
+  "version": "0.0.0",
+  "dependencies": {
+    "express": "expressjs/express",
+    "mocha": "mochajs/mocha#4727d357ea",
+    "module": "user/repo#feature/branch"
+  }
+}// Not valid metadata
+{
+  "license" : {
+    "type" : "ISC",
+    "url" : "https://opensource.org/licenses/ISC"
+  }
+}
+
+// Not valid metadata
+{
+  "licenses" : [
+    {
+      "type": "MIT",
+      "url": "https://www.opensource.org/licenses/mit-license.php"
+    },
+    {
+      "type": "Apache-2.0",
+      "url": "https://opensource.org/licenses/apache2.0.php"
+    }
+  ]
+}{
+  "cpu": ["!arm", "!mips"]
+}https://opensource.org/licenses/apache2.0.php{
+  "cpu": ["!arm", "!mips"]
+}.github
