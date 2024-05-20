@@ -275,3 +275,104 @@ The scripts and documentation in this project are released under the [MIT Licens
 ## Contributions
 
 Contributions are welcome! See [Contributor's Guide](docs/contributors.md)
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        java: [ '8', '11' ]
+        os: [ 'ubuntu-latest', 'macos-latest', 'windows-latest' ]
+    name: Java ${{ matrix.Java }} (${{ matrix.os }}) sample
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java }}
+      - run: java -cp java HelloWorldApp
+      <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <servers>
+    <server>
+      <id>github</id>
+      <username>${env.GITHUB_ACTOR}</username>
+      <password>${env.GITHUB_TOKEN}</password>
+    </server>
+    <server>
+      <id>gpg.passphrase</id>
+      <passphrase>${env.GPG_PASSPHRASE}</passphrase>
+    </server>
+  </servers>
+</settings>https://maven.apache.org/xsd/settings-1.0.0.xsdjobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        distribution: '<distribution>'
+        java-version: '11'
+
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+
+    - name: Publish to GitHub Packages Apache Maven
+      run: mvn deploy
+      env:
+        GITHUB_TOKEN: ${{ github.token }} # GITHUB_TOKEN is the default env for the password
+
+    - name: Set up Apache Maven Central
+      uses: actions/setup-java@v2
+      with: # running setup-java again overwrites the settings.xml
+        distribution: 'temurin'
+        java-version: '11'
+        server-id: maven # Value of the distributionManagement/repository/id field of the pom.xml
+        server-username: MAVEN_USERNAME # env variable for username in deploy
+        server-password: MAVEN_CENTRAL_TOKEN # env variable for token in deploy
+        gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import
+        gpg-passphrase: MAVEN_GPG_PASSPHRASE # env variable for GPG private key passphrase
+
+    - name: Publish to Apache Maven Central
+      run: mvn deploy
+      env:
+        MAVEN_USERNAME: maven_username123
+        MAVEN_CENTRAL_TOKEN: ${{ secrets.MAVEN_CENTRAL_TOKEN }}
+        MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}https://maven.apache.org/xsd/settings-1.0.0.xsd<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <servers>
+    <server>
+      <id>github</id>
+      <username>${env.GITHUB_ACTOR}</username>
+      <password>${env.GITHUB_TOKEN}</password>
+    </server>
+    <server>
+      <id>gpg.passphrase</id>
+      <passphrase>${env.GPG_PASSPHRASE}</passphrase>
+    </server>
+  </servers>
+</settings>http://www.w3.org/2001/XMLSchema-instancehttp://maven.apache.org/SETTINGS/1.0.0<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <servers>
+    <server>
+      <id>maven</id>
+      <username>${env.MAVEN_USERNAME}</username>
+      <password>${env.MAVEN_CENTRAL_TOKEN}</password>
+    </server>
+    <server>
+      <id>gpg.passphrase</id>
+      <passphrase>${env.MAVEN_GPG_PASSPHRASE}</passphrase>
+    </server>
+  </servers>
+</settings><configuration>
+  <!-- Prevent gpg from using pinentry programs -->
+  <gpgArguments>
+    <arg>--pinentry-mode</arg>
+    <arg>loopback</arg>
+  </gpgArguments>
+</configuration>
